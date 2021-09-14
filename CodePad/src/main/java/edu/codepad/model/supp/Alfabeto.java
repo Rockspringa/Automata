@@ -19,11 +19,10 @@ public class Alfabeto {
     }
 
     public int getIndex(char ch) {
-        for (int i = 0; i < this.rangos.length; i++) {
+        for (int i = 0; i < this.rangos.length; i++)
             for (int j = 0; j < this.rangos[i].length / 2; j += 2)
                 if (ch >= this.rangos[i][j] && ch <= this.rangos[i][j + 1])
                     return i;
-        }
         return -1;
     }
 }
