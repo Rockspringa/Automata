@@ -1,4 +1,4 @@
-package edu.codepad.model.supp;
+package edu.codepad.model.supp.analisis;
 
 /**
  * El <code>Alfabeto</code> representa un objeto que almacena los rangos entro
@@ -24,5 +24,9 @@ public class Alfabeto {
                 if (ch >= this.rangos[i][j] && ch <= this.rangos[i][j + 1])
                     return i;
         return -1;
+    }
+
+    public int getCantConjuntos() {
+        return rangos.length;
     }
 }
