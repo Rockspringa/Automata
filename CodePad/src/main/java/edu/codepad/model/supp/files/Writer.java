@@ -23,8 +23,8 @@ public class Writer {
         this.chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
     }
 
-    public void export(File dir, String filename, String[] content) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(filename)))) {
+    public void export(File file, String[] content) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             StringBuilder sb = new StringBuilder();
 
             for (String line : content)
