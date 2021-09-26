@@ -33,7 +33,7 @@ public class Reader {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 
             while ((line = reader.readLine()) != null)
-                out.add(line + " ");
+                out.add(line + "\n");
 
         } catch (IOException e) {
             out.add("Hubo un error al abrir o leer el archivo. Msg: " + e.getMessage());
