@@ -41,6 +41,9 @@ public class Reemplazador {
         if (!sup.isEmpty()) {
             tmp.add(sup.toString());
         }
+        if (cont.length() > 0 && cont.toCharArray()[cont.length() - 1] == '\n') {
+            tmp.add("");
+        }
 
         return tmp.toArray(new String[0]);
     }

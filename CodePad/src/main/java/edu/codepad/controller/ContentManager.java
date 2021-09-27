@@ -28,8 +28,10 @@ public class ContentManager {
     /**
      * El objetivo del metodo es el de actualizar el area de texto de la vista
      * mediante un archivo de entrada.
+     * 
+     * @throws IOException
      */
-    public String updateTextArea() {
+    public String updateTextArea() throws IOException {
         StringBuilder sb = new StringBuilder();
         Reader reader = new Reader();
 
@@ -50,7 +52,7 @@ public class ContentManager {
      * el mismo contenido el controlador y la vista.
      */
     public void setContent(String cont) {
-        fileContent = Reemplazador.replace(cont, "\n", "");
+        fileContent = Reemplazador.replace(cont, "\n", "|");
     }
 
     /**
@@ -64,10 +66,30 @@ public class ContentManager {
     /**
      * El metodo sirve para actualizar el archivo de entrada, no funcionara para
      * crear un nuevo archivo.
+     * 
+     * @return un booleano que representa si se termino la accion con un true
+     * @throws IOException
      */
     public boolean saveChanges() throws IOException {
         Writer writer = new Writer(actualFile.toPath().toString());
-        writer.export(actualFile, Reemplazador.replace(fileContent, "|", "\n"));
+        writer.export(actualFile, Reemplazador.replace(fileContent, "|", ""));
         return true;
+    }
+
+    public String getLineNums() {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 1; i <= fileContent.length; i++) {
+            if (i < 10)
+                sb.append("   " + i + "\n");
+            else if (i < 100)
+                sb.append("  " + i + "\n");
+            else if (i < 1000)
+                sb.append(" " + i + "\n");
+            else
+                sb.append(i + "\n");
+        }
+
+        return sb.toString();
     }
 }

@@ -26,7 +26,7 @@ public class Reader {
         return null;
     }
 
-    public String[] getContentFile(File file) {
+    public String[] getContentFile(File file) throws IOException {
         ArrayList<String> out = new ArrayList<>();
         String line;
         
@@ -35,8 +35,6 @@ public class Reader {
             while ((line = reader.readLine()) != null)
                 out.add(line + "\n");
 
-        } catch (IOException e) {
-            out.add("Hubo un error al abrir o leer el archivo. Msg: " + e.getMessage());
         }
         return out.toArray(new String[0]);
     }
