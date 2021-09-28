@@ -108,8 +108,8 @@ public class AFDToken implements Automata {
         return tempState;
     }
 
-    private String[] isSemiFinalState(Token preToken) {
-        String[] retornar = null;
+    private Object[] isSemiFinalState(Token preToken) {
+        Object[] retornar = null;
         if (state == 0) {
             if (preToken != Token.VACIO) {
                 if (preToken == Token.PUNTUACION || preToken == Token.OPERADOR || preToken == Token.AGRUPACION) {
@@ -120,14 +120,14 @@ public class AFDToken implements Automata {
             }
             lexema = "";
         } else if (state == 3 || state == 4 || state == 5) {
-            retornar = new String[] { tokens[state].toString(), lexema, "" };
+            retornar = new Object[] { tokens[state], lexema, "" };
             lexema = "";
         }
         return retornar;
     }
 
     @Override
-    public String[] getNextState(char ch) {
+    public Object[] getNextState(char ch) {
         int col = verifyCharacter(ch);
 
         Token preToken = tokens[state];
@@ -146,10 +146,10 @@ public class AFDToken implements Automata {
     }
 
     @Override
-    public String[] getTokenState() {
+    public Object[] getTokenState() {
         if (tokens[state] != Token.VACIO && tokens[state] != Token.PUNTUACION
                 && tokens[state] != Token.OPERADOR && tokens[state] != Token.AGRUPACION)
-            return new String[] { tokens[state].toString(), lexema, "" };
+            return new Object[] { tokens[state], lexema, "" };
 
         else if (tokens[state] == Token.INCOMPLETO)
             throw new InvalidCharacterException(new String[] { "El decimal no se completo.", lexema, "" });

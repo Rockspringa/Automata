@@ -16,8 +16,8 @@ public class Reconocedor {
         this.fileContent = cont;
     }
 
-    public String[][] getReport() {
-        ArrayList<String[]> report = new ArrayList<>();
+    public Object[][] getReport() {
+        ArrayList<Object[]> report = new ArrayList<>();
         char[] content = fileContent.toCharArray();
         AFDToken recog = new AFDToken();
         int length = content.length - 1;
@@ -28,7 +28,7 @@ public class Reconocedor {
             int end = 1;
 
             for (char ch : content) {
-                String[] reportPart = recog.getNextState(ch);
+                Object[] reportPart = recog.getNextState(ch);
 
                 if (reportPart != null) {
                     reportPart[2] = "Fi: " + start + ", Ff: " + (end - 1) + ", C: " + column;
@@ -47,7 +47,7 @@ public class Reconocedor {
                 }
             }
             if (length >= 0 && (content[length] != ' ' && content[length] != '\n' && content[length] != '\r')) {
-                String[] reportPart = recog.getTokenState();
+                Object[] reportPart = recog.getTokenState();
                 
                 if (reportPart != null) {
                     reportPart[2] = "Fi: " + start + ", Ff: " + (end - 1) + ", C: " + column;
@@ -71,7 +71,7 @@ public class Reconocedor {
                     if (ch == content[length] && length >= 0
                             && (content[length] != ' ' && content[length] != '\n' && content[length] != '\r')) {
                         
-                        String[] reportPart = recog.getTokenState();
+                        Object[] reportPart = recog.getTokenState();
                         
                         if (reportPart != null) {
                             reportPart[2] = "Fi: " + start + ", Ff: " + (end - 1) + ", C: " + column;
@@ -79,7 +79,7 @@ public class Reconocedor {
                         }
                     }
                 } catch (InvalidCharacterException ex) {
-                    String[] reportPart = ex.getReporte();
+                    Object[] reportPart = ex.getReporte();
                     reportPart[2] = "Fi: " + start + ", Ff: " + (end - 1) + ", C: " + column;
                     report.add(reportPart);
                 }
@@ -99,7 +99,7 @@ public class Reconocedor {
         }
 
         logContent = recog.getLog();
-        return report.toArray(new String[0][]);
+        return report.toArray(new Object[0][]);
     }
 
     public boolean isErrors() {

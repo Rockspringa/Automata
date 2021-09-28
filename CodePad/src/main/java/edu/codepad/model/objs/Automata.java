@@ -7,14 +7,14 @@ public interface Automata {
      * @param ch es el caracter con el que se decidira a que estado cambiara el automata.
      * @return array a agregar al reporte, por lo general se regresaria array solo al encontrar un espacio.
      */
-    String[] getNextState(char ch);
+    Object[] getNextState(char ch);
 
     /**
      * El metodo corrobora el estado actual, para evitar que el metodo {@link #getNextState} deje sin
      * reporte del ultimo estado cuando no existe un espacio final.
      * @return array a agregar al reporte.
      */
-    String[] getTokenState();
+    Object[] getTokenState();
 
     /**
      * El metodo devolvera lo que exista en el log interno de transiciones, donde se encuentra cada

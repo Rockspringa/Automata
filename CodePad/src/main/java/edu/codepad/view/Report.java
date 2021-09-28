@@ -46,7 +46,7 @@ public class Report extends JFrame {
     }
 
     public void setContent(Reconocedor recog) {
-        String[][] data = recog.getReport();
+        Object[][] data = recog.getReport();
         String[] columnNames = recog.getColumnNames();
         String log = recog.getTrasitionLog();
 
@@ -141,10 +141,10 @@ public class Report extends JFrame {
             this.scroll2.getVerticalScrollBar().setModel(this.scroll3.getVerticalScrollBar().getModel());
         }
 
-        public void setModel(String[][] data, String[] columnNames) {
-            String[][] data1 = new String[data.length][1];
-            String[][] data2 = new String[data.length][1];
-            String[][] data3 = new String[data.length][1];
+        public void setModel(Object[][] data, String[] columnNames) {
+            Object[][] data1 = new Object[data.length][1];
+            Object[][] data2 = new Object[data.length][1];
+            Object[][] data3 = new Object[data.length][1];
 
             String[] columnName1 = new String[1];
             String[] columnName2 = new String[1];
