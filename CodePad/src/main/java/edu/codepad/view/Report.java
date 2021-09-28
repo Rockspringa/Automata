@@ -4,9 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -15,16 +20,27 @@ import javax.swing.table.DefaultTableModel;
 
 import edu.codepad.controller.Reconocedor;
 
-public class Report extends JFrame {
+public class Report extends JFrame implements ActionListener {
 
     private ThreeColumnTable contenidoTable;
 
     private JScrollPane logScroll;
     private JTextPane logText;
 
+    private JMenuBar menuBar;
+    private JMenuItem menuItem;
+
+    private Object[][] countLexemesData;
+
     public Report() {
         this.setLayout(new BorderLayout(10, 5));
         ((JPanel) this.getContentPane()).setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+        this.menuBar = new JMenuBar();
+
+        this.menuItem = new JMenuItem("Contar Tokens");
+        this.menuItem.addActionListener(this);
+        this.menuBar.add(this.menuItem);
 
         this.contenidoTable = new ThreeColumnTable();
         this.contenidoTable.setPreferredSize(new Dimension(700, 350));
@@ -55,9 +71,21 @@ public class Report extends JFrame {
 
         if (recog.isErrors()) {
             this.setTitle("Reporte de Errores");
+            this.setJMenuBar(null);
         } else {
             this.setTitle("Reporte de Tokens");
+            this.setJMenuBar(this.menuBar);
+            this.countLexemesData = recog.countLexemes();
         }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String[] columnNames = new String[] { "Lexema", "Token", "Apariciones" };
+        JTable tabla = new JTable(new StaticTableModel(this.countLexemesData, columnNames));
+
+        JOptionPane.showMessageDialog(this, new JScrollPane(tabla), "Conteo de Lexemas",
+                JOptionPane.INFORMATION_MESSAGE, null);
     }
 
     @Override

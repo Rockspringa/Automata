@@ -27,6 +27,7 @@ import edu.codepad.controller.ContentManager;
 import edu.codepad.controller.Reconocedor;
 
 public class Principal extends JFrame implements KeyListener, FocusListener {
+    public static final Font JB_BOLD = new Font("JetBrainsMono Nerd Font Mono", 1, 15);
     public static final Font JBRAINS = new Font("JetBrainsMono NF", 1, 13);
 
     private ContentManager manager;
@@ -49,8 +50,9 @@ public class Principal extends JFrame implements KeyListener, FocusListener {
     static {
         UIManager.put("Table.font", JBRAINS);
         UIManager.put("Label.font", JBRAINS);
-        UIManager.put("Button.font", JBRAINS);
+        UIManager.put("Button.font", JB_BOLD);
         UIManager.put("TextPane.font", JBRAINS);
+        UIManager.put("TableHeader.font", JB_BOLD);
     }
 
     public Principal() {

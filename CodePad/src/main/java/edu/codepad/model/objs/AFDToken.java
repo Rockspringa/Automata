@@ -115,7 +115,7 @@ public class AFDToken implements Automata {
                 if (preToken == Token.PUNTUACION || preToken == Token.OPERADOR || preToken == Token.AGRUPACION) {
                     lexema = "";
                 } else {
-                    retornar = new String[] { preToken.toString(), lexema, "" };
+                    retornar = new Object[] { preToken, lexema, "" };
                 }
             }
             lexema = "";
