@@ -1,6 +1,7 @@
 package edu.codepad.view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
@@ -13,7 +14,6 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -24,6 +24,7 @@ import javax.swing.UIManager;
 import javax.swing.text.DefaultCaret;
 
 import edu.codepad.controller.ContentManager;
+import edu.codepad.controller.Reconocedor;
 
 public class Principal extends JFrame implements KeyListener, FocusListener {
     public static final Font JBRAINS = new Font("JetBrainsMono NF", 1, 13);
@@ -41,8 +42,12 @@ public class Principal extends JFrame implements KeyListener, FocusListener {
     private JButton cargarBtn;
     private JButton guardarBtn;
     private JButton buscarBtn;
+    private JButton reporteBtn;
+
+    private Report reportWindow;
 
     static {
+        UIManager.put("Table.font", JBRAINS);
         UIManager.put("Label.font", JBRAINS);
         UIManager.put("Button.font", JBRAINS);
         UIManager.put("TextPane.font", JBRAINS);
@@ -50,7 +55,7 @@ public class Principal extends JFrame implements KeyListener, FocusListener {
 
     public Principal() {
         super("Analizador lexico");
-        this.setLayout(new BorderLayout(10, 20));
+        this.setLayout(new BorderLayout(10, 5));
         ((JPanel) this.getContentPane()).setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         /* Componentes para la parte de texto, numero de linea y demas */
@@ -82,34 +87,49 @@ public class Principal extends JFrame implements KeyListener, FocusListener {
         /* Componentes de la parte de botones */
 
         this.botoneraPane = new JPanel();
-        this.botoneraPane.setLayout(new GridLayout(0, 1, 10, 10));
-        this.add(this.botoneraPane, BorderLayout.LINE_END);
+        this.botoneraPane.setLayout(new GridLayout(1, 0, 10, 0));
+        this.add(this.botoneraPane, BorderLayout.PAGE_START);
+
+        /* Boton para cargar un archivo con un panel que lo coloque */
 
         this.cargarBtn = new JButton("\nCargar Archivo\n");
         this.cargarBtn.addActionListener(new CargarArchivoListener());
 
         JPanel cargarPane = new JPanel();
-        cargarPane.setLayout(new BoxLayout(cargarPane, BoxLayout.LINE_AXIS));
         cargarPane.add(this.cargarBtn);
         this.botoneraPane.add(cargarPane);
 
+        /* Boton para guardar los cambios del archivo */
+
         this.guardarBtn = new JButton("\nGuardar Archivo\n");
         this.guardarBtn.addActionListener(new GuardarArchivoListener());
-        
+
         JPanel guardarPane = new JPanel();
-        guardarPane.setLayout(new BoxLayout(guardarPane, BoxLayout.LINE_AXIS));
         guardarPane.add(this.guardarBtn);
         this.botoneraPane.add(guardarPane);
+
+        /* Boton para generar un reporte de tokens */
+
+        this.reporteBtn = new JButton("\nGenerar Reporte\n");
+        this.reporteBtn.addActionListener(new ReporteListener());
+
+        JPanel reportePane = new JPanel();
+        reportePane.add(this.reporteBtn);
+        this.botoneraPane.add(reportePane);
+
+        /* Boton para abrir el buscador de caracteres */
 
         this.buscarBtn = new JButton("\nAbrir Buscador\n");
         this.buscarBtn.addActionListener(new BuscadorListener());
 
         JPanel buscarPane = new JPanel();
-        buscarPane.setLayout(new BoxLayout(buscarPane, BoxLayout.LINE_AXIS));
         buscarPane.add(this.buscarBtn);
         this.botoneraPane.add(buscarPane);
 
-        this.setBounds(0, 0, 500, 500);
+        /* Seteo de la informacion de la ventana */
+
+        this.setBounds(0, 0, 750, 600);
+        this.setMinimumSize(new Dimension(700, 400));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.setLocationRelativeTo(null);
@@ -117,20 +137,23 @@ public class Principal extends JFrame implements KeyListener, FocusListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        this.manager.setContent(this.textoPrincipal.getText());
+        this.manager.setContent(this.textoPrincipal.getText().replace("\r", ""));
         this.textoContador.setText(this.manager.getLineNums());
+
+        if (reportWindow != null)
+            reportWindow.setVisible(false);
     }
 
     @Override
     public void focusGained(FocusEvent e) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void focusLost(FocusEvent e) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -188,6 +211,21 @@ public class Principal extends JFrame implements KeyListener, FocusListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             // modificar
+        }
+
+    }
+
+    private class ReporteListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Reconocedor recog = new Reconocedor(textoPrincipal.getText().replace("\r", ""));
+
+            if (reportWindow == null) {
+                reportWindow = new Report();
+            }
+            reportWindow.setContent(recog);
+            reportWindow.setVisible(true);
         }
 
     }

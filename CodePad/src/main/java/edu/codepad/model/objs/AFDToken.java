@@ -34,7 +34,7 @@ public class AFDToken implements Automata {
                             { '.', '.', ',', ',', ':', ';' },
                             { '*', '+', '-', '-', '/', '/', '%', '%' },
                             { '(', ')', '[', '[', ']', ']', '{', '{', '}', '}' },
-                            { ' ', ' ', '\n', '\n' }
+                            { '\r', '\r', '\n', '\n', ' ', ' '  }
                         });
 
     private final int[][] transiciones = new int[][] {
@@ -62,13 +62,17 @@ public class AFDToken implements Automata {
     private int verifyCharacter(char ch) {
         int col = alfabeto.getIndex(ch);
 
-        if (ch != ' ' || ch != '\n') lexema += ch;
+        if (ch != ' ' && ch != '\n' && ch != '\r') lexema += ch;
 
         if (col < 0 || col >= alfabeto.getCantConjuntos()) {
+            String tmpLexema = lexema;
             String msg = "El caracter '" + ch + "' no pertenece al alfabeto aceptado.";
-            LOG.append(msg + "\n");
 
-            throw new InvalidCharacterException(new String[] { msg, lexema, "" });
+            LOG.append(msg + "\n");
+            state = 0;
+            lexema = "";
+
+            throw new InvalidCharacterException(new String[] { msg, tmpLexema, "" });
         }
 
         return col;
@@ -78,6 +82,7 @@ public class AFDToken implements Automata {
         int tempState = transiciones[state][col];
 
         if (tempState < 0) {
+            String tmpLexema = lexema;
             String msg = "Se ingreso un caracter invalido cuando se esperaba ";
 
             msg += switch (tokens[state]) {
@@ -91,24 +96,34 @@ public class AFDToken implements Automata {
                 default -> "";
             };
 
-            msg += " o un espacio, no el caracter '" + ch + "'.";
+            if (ch == '\n' || ch == '\r') msg += " o un espacio, no el caracter '\\n'.";
+            else msg += " o un espacio, no el caracter '" + ch + "'.";
             LOG.append(msg + "\n");
+            state = 0;
+            lexema = "";
 
-            throw new InvalidCharacterException(new String[] { msg, lexema, "" });
+            throw new InvalidCharacterException(new String[] { msg, tmpLexema, "" });
         }
 
         return tempState;
     }
 
     private String[] isSemiFinalState(Token preToken) {
+        String[] retornar = null;
         if (state == 0) {
             if (preToken != Token.VACIO) {
-                return new String[] { preToken.toString(), lexema, "" };
+                if (preToken == Token.PUNTUACION || preToken == Token.OPERADOR || preToken == Token.AGRUPACION) {
+                    lexema = "";
+                } else {
+                    retornar = new String[] { preToken.toString(), lexema, "" };
+                }
             }
+            lexema = "";
         } else if (state == 3 || state == 4 || state == 5) {
-            return new String[] { preToken.toString(), lexema, "" };
+            retornar = new String[] { tokens[state].toString(), lexema, "" };
+            lexema = "";
         }
-        return null;
+        return retornar;
     }
 
     @Override
@@ -120,17 +135,23 @@ public class AFDToken implements Automata {
         
         state = verifyNextState(col, ch);
 
-        LOG.append(estado + state + "' con el caracter '" + ch + "'. Token actual: " + tokens[state] + "\n");
+        LOG.append(estado + state + "' con el caracter '");
+
+        if (ch == '\n' || ch == '\r') LOG.append("\\n");
+        else LOG.append(ch);
+
+        LOG.append("'. Token actual: " + tokens[state] + "\n");
 
         return isSemiFinalState(preToken);
     }
 
     @Override
     public String[] getTokenState() {
-        if (tokens[state] != Token.VACIO)
+        if (tokens[state] != Token.VACIO && tokens[state] != Token.PUNTUACION
+                && tokens[state] != Token.OPERADOR && tokens[state] != Token.AGRUPACION)
             return new String[] { tokens[state].toString(), lexema, "" };
 
-        else if (tokens[state] != Token.INCOMPLETO)
+        else if (tokens[state] == Token.INCOMPLETO)
             throw new InvalidCharacterException(new String[] { "El decimal no se completo.", lexema, "" });
 
         return null;
