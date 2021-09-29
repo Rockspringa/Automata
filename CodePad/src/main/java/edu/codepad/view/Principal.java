@@ -183,7 +183,7 @@ public class Principal extends JFrame implements KeyListener {
     @Override
     public void keyTyped(KeyEvent e) {
         if (buscarBtn.isSelected())
-          buscarBtn.doClick();
+            buscarBtn.doClick();
 
         this.manager.setContent(this.textoPrincipal.getText().replace("\r", ""));
         this.textoContador.setText(this.manager.getLineNums());
@@ -210,7 +210,7 @@ public class Principal extends JFrame implements KeyListener {
         public void actionPerformed(ActionEvent e) {
             try {
                 if (buscarBtn.isSelected())
-                  buscarBtn.doClick();
+                    buscarBtn.doClick();
 
                 textoPrincipal.setText(manager.updateTextArea());
                 textoContador.setText(manager.getLineNums());
@@ -229,7 +229,7 @@ public class Principal extends JFrame implements KeyListener {
         public void actionPerformed(ActionEvent e) {
             try {
                 if (buscarBtn.isSelected())
-                  buscarBtn.doClick();
+                    buscarBtn.doClick();
 
                 if (manager.saveChanges()) {
                     JOptionPane.showMessageDialog(window, "El archivo se ha modificado con exito.", "Archivo guardado",
@@ -274,7 +274,7 @@ public class Principal extends JFrame implements KeyListener {
             Reconocedor recog = new Reconocedor(textoPrincipal.getText().replace("\r", ""));
 
             if (buscarBtn.isSelected())
-              buscarBtn.doClick();
+                buscarBtn.doClick();
 
             if (reportWindow == null) {
                 reportWindow = new Report();

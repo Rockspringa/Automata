@@ -60,6 +60,14 @@ public class AFDToken implements Automata {
                             Token.DECIMAL
                         };
 
+    /**
+     * Verifica que un caracter especifico exista dentro del alfabeto, de lo contrario
+     * lanzara un error. Si ocurre un error lo guarda en el log con su causa.
+     * 
+     * @param ch el caracter a buscar en el alfabeto.
+     * @return la columna a la que pertenece dentro de la matriz de transiciones.
+     * @throws InvalidCharacterException cuando el caracter no existe en el alfabeto.
+     */
     private int verifyCharacter(char ch) {
         int col = alfabeto.getIndex(ch);
 
@@ -79,6 +87,15 @@ public class AFDToken implements Automata {
         return col;
     }
 
+    /**
+     * Verifica que el nuevo estado exista, o que sea diferente a <code>-1</code>.
+     * De existir un error se guarda en el log la causa del mismo.
+     * 
+     * @param col es la columna del caracter que se ingreso.
+     * @param ch es el caracter que se ingreso.
+     * @return un entero que es el nuevo estado del automata.
+     * @throws InvalidCharacterException cuando el nuevo estado es igual a -1.
+     */
     private int verifyNextState(int col, char ch) {
         int tempState = transiciones[state][col];
 
@@ -109,6 +126,16 @@ public class AFDToken implements Automata {
         return tempState;
     }
 
+    /**
+     * Valida si el automata ya termino de reconocer un Token o si el Token es de un solo
+     * caracter.
+     * 
+     * @param preToken es el token anterior del automata, se compara con el actual estado.
+     * 
+     * @return null cuando no se ha terminado de reconocer un token. De lo contrario
+     *          devuelve un array que contiene el token reconocido, el lexema, y un vacio
+     *          para agregar la posicion del lexema.
+     */
     private Object[] isSemiFinalState(Token preToken) {
         Object[] retornar = null;
         if (state == 0) {

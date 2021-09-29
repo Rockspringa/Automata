@@ -6,20 +6,5 @@ package edu.codepad.model.supp.analisis.enums;
  * de aceptacion o no aceptacion.
  */
 public enum Token {
-    VACIO(), IDENTIFICADOR(), NUMERO(), DECIMAL(), PUNTUACION(), OPERADOR(), AGRUPACION(),
-    INCOMPLETO("Se esperaba un digito.");
-
-    private final String msg;
-
-    private Token() {
-        this.msg = "";
-    }
-
-    private Token(String msg) {
-        this.msg = msg;
-    }
-
-    public String getMessage() {
-        return this.msg;
-    }
+    VACIO, IDENTIFICADOR, NUMERO, DECIMAL, PUNTUACION, OPERADOR, AGRUPACION, INCOMPLETO;
 }

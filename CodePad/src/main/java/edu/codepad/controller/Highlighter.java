@@ -3,7 +3,7 @@ package edu.codepad.controller;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import javax.swing.JEditorPane;
+import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 
@@ -12,17 +12,28 @@ import edu.codepad.model.objs.automatas.Buscador;
 import edu.codepad.model.supp.analisis.Coordenadas;
 import edu.codepad.model.supp.analisis.enums.GeneralToken;
 
+/**
+ * Esta clase tiene busca las cadenas de texto y las subraya en el texto
+ * proporcionado.
+ */
 public class Highlighter {
 
     private ArrayList<Coordenadas> coors = new ArrayList<>();
     private String fileContent;
-    private JEditorPane pane;
+    private JTextPane pane;
 
-    public Highlighter(String cont, JEditorPane pane) {
+    /**
+     * @param cont es el contenido del panel de texto.
+     * @param pane es el panel en el cual se hara el highlight o subrayado.
+     */
+    public Highlighter(String cont, JTextPane pane) {
         this.fileContent = cont;
         this.pane = pane;
     }
 
+    /**
+     * Se encarga de hacer el subrayado del texto en el panel.
+     */
     private void highlightText() {
         for (Coordenadas coor : coors) {
             DefaultHighlightPainter highlightPainter = new DefaultHighlightPainter(Color.MAGENTA);
@@ -34,6 +45,12 @@ public class Highlighter {
         }
     }
 
+    /**
+     * Realiza la busqueda y subrayado de un String dentro del texto proporcionado
+     * al crear este objeto.
+     * 
+     * @param buscar es el String a buscar dentro del texto.
+     */
     public void buscar(String buscar) {
         Buscador bus = new Buscador(buscar);
         int start = 1;

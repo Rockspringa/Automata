@@ -65,7 +65,9 @@ public class Reemplazador {
         int rplIndex = 0;
 
         for (String elem : cont) {
-            elem = elem.strip();
+            if (elem.equals(""))
+                continue;
+                
             for (char l : elem.toCharArray()) {
                 if (l == rplChars[rplIndex++]) {
                     if (rplIndex == rplChars.length) {

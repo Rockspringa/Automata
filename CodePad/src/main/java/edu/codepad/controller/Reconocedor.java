@@ -7,6 +7,10 @@ import edu.codepad.model.exceptions.InvalidCharacterException;
 import edu.codepad.model.objs.automatas.AFDToken;
 import edu.codepad.model.supp.analisis.enums.Token;
 
+/**
+ * Su funcionalidad es la de reconocer tokens del texto de entrada, busca y
+ * maneja errores posibles de esta funcion.
+ */
 public class Reconocedor {
 
     private ArrayList<Object[]> report = new ArrayList<>();
@@ -15,10 +19,20 @@ public class Reconocedor {
     private String fileContent;
     private String[] columnNames;
 
+    /**
+     * @param cont es el contenido del cual se reconoceran los tokens existentes.
+     */
     public Reconocedor(String cont) {
         this.fileContent = cont;
     }
 
+    /**
+     * Reconoce el texto con el cual se creo el objeto, con este busca todos los
+     * Tokens o errores y los guarda en una matriz.
+     * 
+     * @return una matriz que contiene los errores o de no existir ninguno, los
+     *         tokens.
+     */
     public Object[][] getReport() {
         char[] content = fileContent.toCharArray();
         AFDToken recog = new AFDToken();
@@ -101,18 +115,43 @@ public class Reconocedor {
         return report.toArray(new Object[0][]);
     }
 
+    /**
+     * @return un boolean que representa si se encontraron errores en el analisis de
+     *         tokens.
+     */
     public boolean isErrors() {
         return this.errors;
     }
 
+    /**
+     * @return un array de Strings que contiene los nombres de las columnas.
+     *         <ul>
+     *         <li>Si existen errores devolver el array
+     *         <code>{ "Causa", "Cadena de error", "Posicion" }</code></li>
+     *         <li>De lo contrario devolvera el array
+     *         <code>{ "Nombre del Token", "Token", "Posicion" }</code>.</li>
+     *         </ul>
+     */
     public String[] getColumnNames() {
         return columnNames;
     }
 
+    /**
+     * @return el log de todas las transiciones que se realizaron al analizar el
+     *         texto.
+     */
     public String getTrasitionLog() {
         return logContent;
     }
 
+    /**
+     * El metodo busca todos los lexemas que se guardaron al crear el reporte. Estos
+     * los cuenta y los formatea para que sea una matriza que contenga, el lexema,
+     * su token y su cantidad de apariciones en el texto.
+     * 
+     * @return un array con el lexema, su token y su cantidad de apariciones en el
+     *         texto.
+     */
     public Object[][] countLexemes() {
         ArrayList<Object[]> output = new ArrayList<>();
         HashMap<Object, Object[]> lexemas = new HashMap<>();
