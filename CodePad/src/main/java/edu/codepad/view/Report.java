@@ -2,8 +2,8 @@ package edu.codepad.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextPane;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.DefaultTableModel;
 
 import edu.codepad.controller.Reconocedor;
@@ -54,6 +55,8 @@ public class Report extends JFrame implements ActionListener {
         this.logScroll.setPreferredSize(new Dimension(100, 150));
         this.logScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         this.logScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        this.logScroll.getVerticalScrollBar().setUI(new BasicScrollBarUI());
+        this.logScroll.getHorizontalScrollBar().setUI(new BasicScrollBarUI());
         this.add(this.logScroll, BorderLayout.AFTER_LAST_LINE);
 
         this.setBounds(50, 50, 850, 600);
@@ -83,6 +86,7 @@ public class Report extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String[] columnNames = new String[] { "Lexema", "Token", "Apariciones" };
         JTable tabla = new JTable(new StaticTableModel(this.countLexemesData, columnNames));
+        tabla.setFillsViewportHeight(true);
 
         JOptionPane.showMessageDialog(this, new JScrollPane(tabla), "Conteo de Lexemas",
                 JOptionPane.INFORMATION_MESSAGE, null);
@@ -165,6 +169,7 @@ public class Report extends JFrame implements ActionListener {
 
             this.col1.setSelectionModel(this.col3.getSelectionModel());
             this.col2.setSelectionModel(this.col3.getSelectionModel());
+            this.scroll3.getVerticalScrollBar().setUI(new BasicScrollBarUI());
             this.scroll1.getVerticalScrollBar().setModel(this.scroll3.getVerticalScrollBar().getModel());
             this.scroll2.getVerticalScrollBar().setModel(this.scroll3.getVerticalScrollBar().getModel());
         }

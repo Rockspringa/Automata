@@ -1,16 +1,15 @@
 package edu.codepad.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
-import java.awt.event.KeyListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
@@ -20,13 +19,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.JToggleButton;
 import javax.swing.UIManager;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.text.DefaultCaret;
 
 import edu.codepad.controller.ContentManager;
+import edu.codepad.controller.Highlighter;
 import edu.codepad.controller.Reconocedor;
 
-public class Principal extends JFrame implements KeyListener, FocusListener {
+public class Principal extends JFrame implements KeyListener {
     public static final Font JB_BOLD = new Font("JetBrainsMono Nerd Font Mono", 1, 15);
     public static final Font JBRAINS = new Font("JetBrainsMono NF", 1, 13);
 
@@ -42,7 +44,7 @@ public class Principal extends JFrame implements KeyListener, FocusListener {
     private JPanel botoneraPane;
     private JButton cargarBtn;
     private JButton guardarBtn;
-    private JButton buscarBtn;
+    private JToggleButton buscarBtn;
     private JButton reporteBtn;
 
     private Report reportWindow;
@@ -52,7 +54,47 @@ public class Principal extends JFrame implements KeyListener, FocusListener {
         UIManager.put("Label.font", JBRAINS);
         UIManager.put("Button.font", JB_BOLD);
         UIManager.put("TextPane.font", JBRAINS);
+        UIManager.put("MenuItem.font", JBRAINS);
         UIManager.put("TableHeader.font", JB_BOLD);
+        UIManager.put("ToggleButton.font", JB_BOLD);
+
+        UIManager.put("ScrollBar.thumbDarkShadow", Color.LIGHT_GRAY);
+        UIManager.put("ScrollBar.thumbHighlight", Color.DARK_GRAY);
+        UIManager.put("ScrollBar.thumbShadow", Color.DARK_GRAY);
+        UIManager.put("ScrollBar.background", Color.GRAY);
+        UIManager.put("ScrollBar.thumb", Color.DARK_GRAY);
+        UIManager.put("ScrollBar.track", Color.GRAY);
+        UIManager.put("ScrollBar.width", 12);
+
+        UIManager.put("ComboBox.font", JBRAINS);
+        UIManager.put("ComboBox.background", Color.GRAY);
+        UIManager.put("ComboBox.foreground", Color.BLACK);
+        UIManager.put("ComboBox.buttonBackground", Color.DARK_GRAY);
+        UIManager.put("ComboBox.border", BorderFactory.createEmptyBorder());
+        UIManager.put("ComboBox.focus", Color.WHITE);
+        UIManager.put("ComboBox.selectionBackground", Color.BLACK);
+        UIManager.put("ComboBox.selectionForeground", Color.WHITE);
+        UIManager.put("ComboBox.selectionFocus", Color.WHITE);
+
+        UIManager.put("ScrollPane.background", Color.LIGHT_GRAY);
+        UIManager.put("TextPane.background", Color.LIGHT_GRAY);
+
+        UIManager.put("TableHeader.background", Color.DARK_GRAY);
+        UIManager.put("TableHeader.foreground", Color.WHITE);
+        UIManager.put("Table.background", Color.LIGHT_GRAY);
+        UIManager.put("Table.gridColor", Color.DARK_GRAY);
+
+        UIManager.put("Button.background", Color.DARK_GRAY);
+        UIManager.put("Button.foreground", Color.WHITE);
+        UIManager.put("Button.select", Color.BLACK);
+        UIManager.put("Button.focus", Color.LIGHT_GRAY);
+        UIManager.put("Button.border", BorderFactory.createEmptyBorder(5, 10, 5, 10));
+
+        UIManager.put("ToggleButton.select", Color.GRAY);
+        UIManager.put("ToggleButton.background", Color.DARK_GRAY);
+        UIManager.put("ToggleButton.foreground", Color.WHITE);
+        UIManager.put("ToggleButton.focus", Color.WHITE);
+        UIManager.put("ToggleButton.border", BorderFactory.createEmptyBorder(5, 10, 5, 10));
     }
 
     public Principal() {
@@ -74,7 +116,6 @@ public class Principal extends JFrame implements KeyListener, FocusListener {
 
         this.textoPrincipal = new JTextPane();
         this.textoPrincipal.addKeyListener(this);
-        this.textoPrincipal.addFocusListener(this);
 
         this.contadorScroll = new JScrollPane(this.textoContador);
         this.contadorScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
@@ -84,6 +125,8 @@ public class Principal extends JFrame implements KeyListener, FocusListener {
         this.principalScroll = new JScrollPane(this.textoPrincipal);
         this.panelTexto.add(this.principalScroll, BorderLayout.CENTER);
 
+        this.principalScroll.getVerticalScrollBar().setUI(new BasicScrollBarUI());
+        this.principalScroll.getHorizontalScrollBar().setUI(new BasicScrollBarUI());
         this.contadorScroll.getVerticalScrollBar().setModel(this.principalScroll.getVerticalScrollBar().getModel());
 
         /* Componentes de la parte de botones */
@@ -121,7 +164,7 @@ public class Principal extends JFrame implements KeyListener, FocusListener {
 
         /* Boton para abrir el buscador de caracteres */
 
-        this.buscarBtn = new JButton("\nAbrir Buscador\n");
+        this.buscarBtn = new JToggleButton("\nAbrir Buscador\n");
         this.buscarBtn.addActionListener(new BuscadorListener());
 
         JPanel buscarPane = new JPanel();
@@ -139,23 +182,14 @@ public class Principal extends JFrame implements KeyListener, FocusListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
+        if (buscarBtn.isSelected())
+          buscarBtn.doClick();
+
         this.manager.setContent(this.textoPrincipal.getText().replace("\r", ""));
         this.textoContador.setText(this.manager.getLineNums());
 
         if (reportWindow != null)
             reportWindow.setVisible(false);
-    }
-
-    @Override
-    public void focusGained(FocusEvent e) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void focusLost(FocusEvent e) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -175,6 +209,9 @@ public class Principal extends JFrame implements KeyListener, FocusListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
+                if (buscarBtn.isSelected())
+                  buscarBtn.doClick();
+
                 textoPrincipal.setText(manager.updateTextArea());
                 textoContador.setText(manager.getLineNums());
             } catch (IOException | NullPointerException ex) {
@@ -191,6 +228,9 @@ public class Principal extends JFrame implements KeyListener, FocusListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
+                if (buscarBtn.isSelected())
+                  buscarBtn.doClick();
+
                 if (manager.saveChanges()) {
                     JOptionPane.showMessageDialog(window, "El archivo se ha modificado con exito.", "Archivo guardado",
                             JOptionPane.INFORMATION_MESSAGE);
@@ -199,7 +239,7 @@ public class Principal extends JFrame implements KeyListener, FocusListener {
                             "Ocurrio un error al momento de intentar guardar el archivo, vuelva a intentarlo.",
                             "Error al guardar", JOptionPane.ERROR_MESSAGE);
                 }
-            } catch (HeadlessException | IOException e1) {
+            } catch (NullPointerException | HeadlessException | IOException e1) {
                 JOptionPane.showMessageDialog(window,
                         "Ocurrio un error al momento de intentar guardar el archivo, vuelva a intentarlo.",
                         "Error al guardar", JOptionPane.ERROR_MESSAGE);
@@ -212,7 +252,17 @@ public class Principal extends JFrame implements KeyListener, FocusListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // modificar
+            JToggleButton btn = (JToggleButton) e.getSource();
+
+            if (btn.isSelected()) {
+                String buscar = JOptionPane.showInputDialog(window, "Ingrese la cadena de texto a buscar",
+                        "Busqueda de cadenas", JOptionPane.QUESTION_MESSAGE);
+
+                Highlighter highlighter = new Highlighter(textoPrincipal.getText().replace("\r", ""), textoPrincipal);
+                highlighter.buscar(buscar);
+            } else {
+                textoPrincipal.getHighlighter().removeAllHighlights();
+            }
         }
 
     }
@@ -222,6 +272,9 @@ public class Principal extends JFrame implements KeyListener, FocusListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             Reconocedor recog = new Reconocedor(textoPrincipal.getText().replace("\r", ""));
+
+            if (buscarBtn.isSelected())
+              buscarBtn.doClick();
 
             if (reportWindow == null) {
                 reportWindow = new Report();

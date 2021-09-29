@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import javax.swing.JFrame;
 
-import edu.codepad.model.supp.busqueda.Reemplazador;
+import edu.codepad.model.supp.Reemplazador;
 import edu.codepad.model.supp.files.Reader;
 import edu.codepad.model.supp.files.Writer;
 
@@ -71,8 +71,8 @@ public class ContentManager {
      * @throws IOException
      */
     public boolean saveChanges() throws IOException {
-        Writer writer = new Writer(actualFile.toPath().toString());
-        writer.export(actualFile, Reemplazador.replace(fileContent, "|", ""));
+        Writer writer = new Writer();
+        actualFile = writer.export(actualFile, Reemplazador.replace(fileContent, "|", ""));
         return true;
     }
 

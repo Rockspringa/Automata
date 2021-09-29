@@ -1,8 +1,9 @@
-package edu.codepad.model.objs;
+package edu.codepad.model.objs.automatas;
 
 import edu.codepad.model.exceptions.InvalidCharacterException;
+import edu.codepad.model.objs.Automata;
 import edu.codepad.model.supp.analisis.Alfabeto;
-import edu.codepad.model.supp.analisis.Token;
+import edu.codepad.model.supp.analisis.enums.Token;
 
 /**
  * El objeto de AFDToken se encarga de ser el analizador de todos los tokens.

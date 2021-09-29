@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import edu.codepad.model.exceptions.InvalidCharacterException;
-import edu.codepad.model.objs.AFDToken;
-import edu.codepad.model.supp.analisis.Token;
+import edu.codepad.model.objs.automatas.AFDToken;
+import edu.codepad.model.supp.analisis.enums.Token;
 
 public class Reconocedor {
 

@@ -3,6 +3,10 @@ package edu.codepad.model.exceptions;
 public class InvalidCharacterException extends RuntimeException {
 
     private final Object[] report;
+
+    public InvalidCharacterException() {
+        report = null;
+    }
     
     public InvalidCharacterException(String[] reporte) {
         Object[] objs = new Object[reporte.length];

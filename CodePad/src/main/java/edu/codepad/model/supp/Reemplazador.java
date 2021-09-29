@@ -1,4 +1,4 @@
-package edu.codepad.model.supp.busqueda;
+package edu.codepad.model.supp;
 
 import java.util.ArrayList;
 
